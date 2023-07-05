@@ -1,0 +1,15 @@
+<div class="customizable-modal">
+  <div class="customizable-modal-header">{{ title }}</div>
+
+  <div class="customizable-modal-body">
+    <div class="customizable-modal-text">{{ text }}</div>
+
+    <div class="customizable-modal-actions">
+      <button class="ok-btn" (click)="close()">{{ okBtnLabel }}</button>
+
+      <button *ngIf="cancelBtnLabel" class="cancel-btn" (click)="dismiss()">
+        {{ cancelBtnLabel }}
+      </button>
+    </div>
+  </div>
+</div>

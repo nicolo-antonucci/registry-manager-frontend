@@ -1,1 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+/* Import Bootstrap */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+app-root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.small-modal {
+  height: 100%;
+  width: 100%;
+
+  .modal-dialog {
+    .modal-content {
+      height: 240px;
+      overflow: hidden;
+      border: 1px solid #6750a4;
+    }
+  }
+}
