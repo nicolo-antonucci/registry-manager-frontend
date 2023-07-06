@@ -13,4 +13,5 @@ export interface ReadRegistriesDto {
   pages: number;
   elementsPerPage: number;
   totalElements: number;
+  highlightedElement: number | null;
 }

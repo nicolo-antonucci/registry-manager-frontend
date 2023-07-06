@@ -9,4 +9,5 @@ export interface RegistryForm {
   city: FormControl<string>;
   province: FormControl<string>;
   notes: FormControl<string>;
+  id?: FormControl<number>
 }

@@ -9,3 +9,14 @@ export interface Registry {
   province?: string | null;
   string?: string | null;
 }
+
+export interface NewRegistry {
+  name: string;
+  surname: string;
+  email: string;
+  address?: string | null;
+  location?: string | null;
+  city?: string | null;
+  province?: string | null;
+  string?: string | null;
+}
