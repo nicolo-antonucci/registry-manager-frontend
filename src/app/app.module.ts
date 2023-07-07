@@ -1,6 +1,6 @@
 import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -11,6 +11,11 @@ import { CustomizableModalComponent } from './components/customizable-modal/cust
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { GetSetLengthPipe } from './pipes/get-set-length.pipe';
 import { GetValuePipe } from './pipes/get-value.pipe';
+import { GetPropPipe } from './pipes/get-prop.pipe';
+import { InfoComponent } from './components/info/info.component';
+import { InputComponent } from './components/input/input.component';
+import { RequiredFormPipe } from './pipes/required-form.pipe';
+import { InvalidFormPipe } from './pipes/invalid-form.pipe';
 
 @NgModule({
   declarations: [
@@ -21,10 +26,16 @@ import { GetValuePipe } from './pipes/get-value.pipe';
     CustomizableModalComponent,
     GetSetLengthPipe,
     GetValuePipe,
+    GetPropPipe,
+    InfoComponent,
+    InputComponent,
+    RequiredFormPipe,
+    InvalidFormPipe,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     FontAwesomeModule,

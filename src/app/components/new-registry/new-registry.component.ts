@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { RegistryForm } from "src/models/registry-form";
+import { NewRegistryForm } from "src/models/registry-form";
 
 @Component({
   selector: "app-new-registry",
@@ -9,7 +9,7 @@ import { RegistryForm } from "src/models/registry-form";
   styleUrls: ["./new-registry.component.scss"],
 })
 export class NewRegistryComponent implements OnInit {
-  form!: FormGroup<RegistryForm>;
+  form!: FormGroup<NewRegistryForm>;
 
   readonly nameRegex = /^[A-Za-z ,.'-]+$/;
   readonly addressRegex =
@@ -89,7 +89,7 @@ export class NewRegistryComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.form = this.fb.group<RegistryForm>({
+    this.form = this.fb.group<NewRegistryForm>({
       address: this.fb.control("", Validators.pattern(this.addressRegex)),
       city: this.fb.control("", Validators.pattern(this.cityRegex)),
       email: this.fb.control(

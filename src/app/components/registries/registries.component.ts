@@ -1,11 +1,19 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  HostListener,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from "@angular/core";
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   Validators,
 } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import {
   faAngleDoubleLeft,
   faAngleDoubleRight,
@@ -13,6 +21,7 @@ import {
   faAngleRight,
   faArrowDown,
   faArrowUp,
+  faEnvelope,
   faMagnifyingGlass,
   faPen,
   faPlus,
@@ -32,7 +41,9 @@ import { NewRegistryComponent } from "../new-registry/new-registry.component";
   templateUrl: "./registries.component.html",
   styleUrls: ["./registries.component.scss"],
 })
-export class RegistriesComponent implements OnDestroy, OnInit {
+export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
+  @ViewChild("table") tableEl!: ElementRef<HTMLDivElement>;
+
   data$!: Observable<ReadRegistriesDto | null>;
   headers: Header[] = [
     {
@@ -91,18 +102,23 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     size: FormControl<number | null>;
   }>;
   selectedSort: {
-    value: string;
-    descending: boolean;
+    sort: string;
+    dir: "asc" | "desc";
   } = {
-    descending: false,
-    value: "name",
+    dir: "asc",
+    sort: "name",
   };
+
+  id!: number | null;
+  pageToShow!: number | null;
+  colWidth!: string;
 
   readonly faUp = faArrowUp;
   readonly faDown = faArrowDown;
   readonly faSearch = faMagnifyingGlass;
   readonly faEdit = faPen;
   readonly faDelete = faTrash;
+  readonly faMail = faEnvelope;
   readonly faAdd = faPlus;
   readonly faFirst = faAngleDoubleLeft;
   readonly faPrevious = faAngleLeft;
@@ -115,6 +131,7 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     private fb: FormBuilder,
     private ngbModal: NgbModal,
     private registryHttp: RegistryHttpService,
+    private route: ActivatedRoute,
     private router: Router
   ) {}
 
@@ -122,7 +139,29 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     return this.pageForm.value.page ?? 0;
   }
 
+  @HostListener("window:resize", ["$event"])
+  getColWidth(): void {
+    const width = window.innerWidth;
+    let actionWidth = 120;
+
+    if (width < 1600) actionWidth = 108;
+
+    if (width <= 1200) actionWidth = 96;
+
+    const colWidth = Math.floor(
+      (this.tableEl.nativeElement.clientWidth - actionWidth) / this.headers.length
+    );
+    this.colWidth = `${colWidth}px`;
+  }
+
   ngOnInit(): void {
+    this.id = this.route.snapshot.queryParamMap.get("id")
+      ? +(this.route.snapshot.queryParamMap.get("id") as string)
+      : null;
+    this.pageToShow = this.route.snapshot.queryParamMap.get("page")
+      ? +(this.route.snapshot.queryParamMap.get("page") as string)
+      : null;
+
     this.searchForm = this.fb.group({
       name: this.fb.control<string>(""),
       surname: this.fb.control<string>(""),
@@ -135,10 +174,12 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     });
 
     this.pageForm = this.fb.group({
-      size: this.fb.control<number>(20, {
+      size: this.fb.control<number>(10, {
         validators: Validators.min(1),
       }),
-      page: this.fb.control<number>(0, { validators: Validators.min(0) }),
+      page: this.fb.control<number>(this.pageToShow ? +this.pageToShow : 0, {
+        validators: Validators.min(0),
+      }),
     });
 
     this.data$ = this.registryHttp.registries.pipe(
@@ -150,18 +191,28 @@ export class RegistriesComponent implements OnDestroy, OnInit {
         }
 
         if (data?.size) {
-          this.pageForm.controls.size.setValue(data.size)
+          this.pageForm.controls.size.setValue(data.size);
         }
+
+        if (data?.highlightedElement) this.id = data.highlightedElement;
       })
     );
 
-    this.registryHttp.readRegistries(
-      this.searchForm.value,
-      this.page ?? 0,
-      this.pageForm.value.size ?? 20,
-      this.selectedSort.value ?? "name",
-      this.selectedSort.descending ? "desc" : "asc"
-    );
+    this.registryHttp.readRegistries(this.searchForm.value, {
+      page: this.page ?? null,
+      size: this.pageForm.value.size ?? null,
+      sort: this.selectedSort.sort,
+      dir: this.selectedSort.dir,
+    });
+  }
+
+  ngAfterViewInit(): void {
+    const attempt = (): void => {
+      if (this.tableEl) this.getColWidth();
+      else setTimeout(() => attempt(), 100);
+    };
+
+    setTimeout(() => attempt(), 100);
   }
 
   ngOnDestroy(): void {
@@ -175,15 +226,22 @@ export class RegistriesComponent implements OnDestroy, OnInit {
       centered: true,
     });
     modalRef.result.then((newRegistry: NewRegistry) =>
-      this.registryHttp.postRegistries(
-        newRegistry,
-        this.searchForm.value,
+      this.registryHttp.postRegistries(newRegistry, this.searchForm.value, {
         page,
         size,
-        this.selectedSort.value ?? "name",
-        this.selectedSort.descending ? "desc" : "asc"
-      )
+        sort: this.selectedSort.sort ?? null,
+        dir: this.selectedSort.dir ?? null,
+      })
     );
+  }
+
+  cleanupRoute(): void {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {},
+    });
+    this.id = null;
+    this.pageToShow = null;
   }
 
   deleteEntry(registry: Registry): void {
@@ -198,14 +256,12 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     modalRef.componentInstance.okBtnLabel = "Conferma cancellazione";
     modalRef.componentInstance.cancelBtnLabel = "Annulla";
     modalRef.result.then(() =>
-      this.registryHttp.deleteRegistry(
-        registry.id,
-        this.searchForm.value,
-        this.page ?? 0,
-        this.pageForm.value.size ?? 20,
-        this.selectedSort.value ?? "name",
-        this.selectedSort.descending ? "desc" : "asc"
-      )
+      this.registryHttp.deleteRegistry(registry.id, this.searchForm.value, {
+        page: this.page ?? null,
+        size: this.pageForm.value.size ?? null,
+        sort: this.selectedSort.sort,
+        dir: this.selectedSort.dir,
+      })
     );
   }
 
@@ -218,45 +274,54 @@ export class RegistriesComponent implements OnDestroy, OnInit {
   }
 
   goToPage(page: number): void {
-    this.registryHttp.readRegistries(
-      this.searchForm.value,
+    this.registryHttp.readRegistries(this.searchForm.value, {
       page,
-      this.pageForm.value.size ?? 20,
-      this.selectedSort.value ?? "name",
-      this.selectedSort.descending ? "desc" : "asc"
-    );
+      size: this.pageForm.value.size ?? null,
+      sort: this.selectedSort.sort,
+      dir: this.selectedSort.dir,
+    });
+
+    this.cleanupRoute();
   }
 
-  isSelectedSort(value: string, descending: boolean): boolean {
+  isSelectedSort(sort: string, dir: "asc" | "desc"): boolean {
     if (!this.selectedSort) return false;
 
-    return (
-      this.selectedSort.value === value &&
-      this.selectedSort.descending === descending
-    );
+    return this.selectedSort.sort === sort && this.selectedSort.dir === dir;
+  }
+
+  openSearch(): void {
+
   }
 
   search(): void {
-    this.registryHttp.readRegistries(
-      this.searchForm.value,
-      this.page ?? 0,
-      this.pageForm.value.size ?? 20,
-      this.selectedSort.value ?? "name",
-      this.selectedSort.descending ? "desc" : "asc"
-    );
+    this.cleanupRoute();
+
+    this.registryHttp.readRegistries(this.searchForm.value, {
+      page: this.page ?? null,
+      size: this.pageForm.value.size ?? null,
+      sort: this.selectedSort.sort,
+      dir: this.selectedSort.dir,
+    });
   }
 
-  sort(value: string, descending = false): void {
+  sendEmail(registry: Registry): void {
+    this.registryHttp.sendEmail(registry.id);
+  }
+
+  sort(sort: string, dir: "asc" | "desc"): void {
     this.selectedSort = {
-      descending,
-      value,
+      dir,
+      sort,
     };
-    this.registryHttp.readRegistries(
-      this.searchForm.value,
-      this.page ?? 0,
-      this.pageForm.value.size ?? 20,
-      this.selectedSort.value ?? "name",
-      this.selectedSort.descending ? "desc" : "asc"
-    );
+
+    this.cleanupRoute();
+
+    this.registryHttp.readRegistries(this.searchForm.value, {
+      page: this.page ?? null,
+      size: this.pageForm.value.size ?? null,
+      sort: this.selectedSort.sort,
+      dir: this.selectedSort.dir,
+    });
   }
 }

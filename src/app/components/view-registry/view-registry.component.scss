@@ -1,0 +1,51 @@
+.registry {
+  height: 100vh;
+  padding: 32px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+  background-color: #fffbfe;
+  color: #1c1b1f;
+
+  h1 {
+    text-align: center;
+    margin: 0;
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+
+    button {
+      padding: 6px 12px;
+      font-weight: bold;
+    }
+
+    .save-btn {
+      border: 1px solid #625b71;
+      border-radius: 6px;
+      background-color: #e8def8;
+      color: #1d192b;
+
+      &:disabled {
+        border: #79747e;
+        color: #49454f;
+        background-color: #e7e0ec;
+      }
+    }
+
+    .go-back-btn {
+      border: 1px solid #7d5260;
+      border-radius: 6px;
+      background-color: #ffd8e4;
+      color: #31111d;
+    }
+  }
+}

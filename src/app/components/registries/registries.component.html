@@ -2,11 +2,10 @@
   <h1>Anagrafiche</h1>
 
   <ng-container *ngIf="data$ | async as data; else loader">
-    <div class="registries-table">
+    <div class="registries-table" #table>
       <div
         class="registries-header"
-        style="--columns: {{ headers.length }}"
-        [formGroup]="searchForm"
+        style="--columns: {{ headers.length }}; --colWidth: {{ colWidth }}"
       >
         <ng-container *ngFor="let header of headers">
           <div
@@ -14,25 +13,29 @@
             style="--columns: {{ headers.length + 1 }}"
           >
             <span>{{ header.label }}</span>
-            <button class="header-btn" (click)="sort(header.value)">
-              <fa-icon
-                class="sort-icon"
-                [ngClass]="{
-                  'selected-sort': isSelectedSort(header.value, false)
-                }"
-                [icon]="faUp"
-              ></fa-icon>
+            <button
+              class="header-btn"
+              [ngClass]="{
+                'selected-sort': isSelectedSort(header.value, 'asc')
+              }"
+              (click)="sort(header.value, 'asc')"
+            >
+              <fa-icon class="sort-icon" [icon]="faUp"></fa-icon>
             </button>
-            <button class="header-btn" (click)="sort(header.value, true)">
-              <fa-icon
-                class="sort-icon"
-                [ngClass]="{
-                  'selected-sort': isSelectedSort(header.value, true)
-                }"
-                [icon]="faDown"
-              ></fa-icon>
+            <button
+              class="header-btn"
+              [ngClass]="{
+                'selected-sort': isSelectedSort(header.value, 'desc')
+              }"
+              (click)="sort(header.value, 'desc')"
+            >
+              <fa-icon class="sort-icon" [icon]="faDown"></fa-icon>
             </button>
-            <form class="header-search" (onSubmit)="search()">
+            <form
+              class="header-search"
+              [formGroup]="searchForm"
+              (onSubmit)="search()"
+            >
               <input
                 class="header-input"
                 formControlName="{{ header.value }}"
@@ -45,12 +48,12 @@
           </div>
         </ng-container>
 
-        <div
-          class="header-cell actions"
-          style="--columns: {{ headers.length + 1 }}"
-        >
+        <div class="header-cell actions">
+          <button class="search-action-btn" (click)="openSearch()">
+            <fa-icon class="faicon" [icon]="faSearch"></fa-icon>
+          </button>
           <button class="add-btn" (click)="addRegistry(data.page, data.size)">
-            <fa-icon class="add-icon" [icon]="faAdd"></fa-icon>
+            <fa-icon class="faicon" [icon]="faAdd"></fa-icon>
           </button>
         </div>
       </div>
@@ -59,10 +62,10 @@
         <ng-container *ngFor="let registry of data.registries; let i = index">
           <div
             class="registry-row"
-            style="--columns: {{ headers.length }}"
+            style="--columns: {{ headers.length }}; --colWidth: {{ colWidth }}"
             [ngClass]="{
               'dark-row': i % 2 === 1,
-              highlighted: registry.id === data.highlightedElement
+              highlighted: id && registry.id === id
             }"
           >
             <ng-container *ngFor="let header of headers">
@@ -80,7 +83,9 @@
                 <fa-icon class="row-icon" [icon]="faEdit"></fa-icon>
               </button>
               <button class="row-btn" (click)="deleteEntry(registry)">
-                <fa-icon class="row-icon" [icon]="faDelete"></fa-icon>
+                <fa-icon class="row-icon" [icon]="faDelete"></fa-icon></button
+              ><button class="row-btn" (click)="sendEmail(registry)">
+                <fa-icon class="row-icon" [icon]="faMail"></fa-icon>
               </button>
             </div>
           </div>
@@ -136,7 +141,11 @@
   </ng-container>
 </div>
 
-<ng-template #loader></ng-template>
+<ng-template #loader>
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
+</ng-template>
 
 <ng-template #empty>
   <div class="empty">

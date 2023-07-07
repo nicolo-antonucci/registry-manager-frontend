@@ -7,7 +7,7 @@ export interface Registry {
   location?: string | null;
   city?: string | null;
   province?: string | null;
-  string?: string | null;
+  notes?: string | null;
 }
 
 export interface NewRegistry {
@@ -18,5 +18,5 @@ export interface NewRegistry {
   location?: string | null;
   city?: string | null;
   province?: string | null;
-  string?: string | null;
+  notes?: string | null;
 }

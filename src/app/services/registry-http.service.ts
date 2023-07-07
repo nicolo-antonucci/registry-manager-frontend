@@ -1,10 +1,12 @@
 import { HttpClient, HttpStatusCode } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { BehaviorSubject, Observable, take } from "rxjs";
+import { BehaviorSubject, Observable, map, take } from "rxjs";
 import { BaseError } from "src/models/base-error";
 import { DeleteRegistryResponseSchema } from "src/models/delete-registry";
-import { NewRegistry } from "src/models/registry";
+import { GetRegistryResponse } from "src/models/get-registry";
+import { NewRegistry, Registry } from "src/models/registry";
+import { UpdateRegistryResponse } from "src/models/update-registry";
 import {
   ReadRegistriesBody,
   ReadRegistriesDto,
@@ -28,22 +30,37 @@ export class RegistryHttpService {
 
   readRegistries(
     readRegistriesBody: ReadRegistriesBody,
-    page = 0,
-    size = 20,
-    sort = "name",
-    dir = "asc"
+    pageParams?: {
+      page: number | null;
+      size: number | null;
+      sort: string | null;
+      dir: "asc" | "desc" | null;
+    }
   ): void {
+    const params: {
+      [param: string]:
+        | string
+        | number
+        | boolean
+        | readonly (string | number | boolean)[];
+    } = {};
+
+    if (pageParams?.page) params["page"] = pageParams.page;
+
+    if (pageParams?.size) params["size"] = pageParams.size;
+
+    if (pageParams?.sort)
+      params["sort"] = pageParams.dir
+        ? `${pageParams.sort},${pageParams.dir}`
+        : pageParams.sort;
+
     this.http
       .post<ReadRegistriesResponseSchema>(
         `${this.baseUrl}`,
         JSON.stringify(readRegistriesBody),
         {
           headers: { "Content-Type": "application/json" },
-          params: {
-            page,
-            size,
-            sort: `${sort},${dir}`,
-          },
+          params,
         }
       )
       .pipe(take(1))
@@ -64,7 +81,7 @@ export class RegistryHttpService {
           modalRef.componentInstance.cancelBtnLabel = "Chiudi";
           modalRef.result.then(
             () => {
-              this.readRegistries(readRegistriesBody, page, size, sort, dir);
+              this.readRegistries(readRegistriesBody, pageParams);
             },
             () => this.registriesSubject.next(null)
           );
@@ -75,23 +92,37 @@ export class RegistryHttpService {
   postRegistries(
     newRegistry: NewRegistry,
     readRegistriesBody: ReadRegistriesBody,
-    page: number,
-    size: number,
-    sort = "name",
-    dir = "asc"
+    pageParams?: {
+      page: number | null;
+      size: number | null;
+      sort: string | null;
+      dir: "asc" | "desc" | null;
+    }
   ): void {
+    const params: {
+      [param: string]:
+        | string
+        | number
+        | boolean
+        | readonly (string | number | boolean)[];
+    } = {};
+
+    if (pageParams?.page) params["page"] = pageParams.page;
+
+    if (pageParams?.size) params["size"] = pageParams.size;
+
+    if (pageParams?.sort)
+      params["sort"] = pageParams.dir
+        ? `${pageParams.sort},${pageParams.dir}`
+        : pageParams.sort;
+
     this.http
       .post<ReadRegistriesResponseSchema>(
         `${this.baseUrl}/new`,
         JSON.stringify({ newRegistry, readRegistriesBody }),
         {
           headers: { "Content-Type": "application/json" },
-          params: {
-            page,
-            size,
-            sort,
-            dir,
-          },
+          params,
         }
       )
       .pipe(take(1))
@@ -128,23 +159,21 @@ export class RegistryHttpService {
   deleteRegistry(
     registryId: number,
     readRegistriesBody: ReadRegistriesBody,
-    page: number,
-    size: number,
-    sort = "name",
-    dir = "asc"
+    pageParams?: {
+      page: number | null;
+      size: number | null;
+      sort: string | null;
+      dir: "asc" | "desc" | null;
+    }
   ): void {
     this.http
       .delete<DeleteRegistryResponseSchema>(`${this.baseUrl}/${registryId}`, {
-        body: {
-          page,
-          size,
-        },
         headers: { "Content-Type": "application/json" },
       })
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.readRegistries(readRegistriesBody, page, size, sort, dir);
+          this.readRegistries(readRegistriesBody, pageParams);
         },
         error: (error: BaseError) => {
           const modalRef = this.ngbModal.open(CustomizableModalComponent, {
@@ -184,5 +213,30 @@ export class RegistryHttpService {
           }
         },
       });
+  }
+
+  getRegistry(id: number): Observable<Registry | null> {
+    return this.http
+      .get<GetRegistryResponse>(`${this.baseUrl}/${id}`)
+      .pipe(map((res) => res.payload));
+  }
+
+  updateRegistry(registry: Registry): Observable<UpdateRegistryResponse> {
+    return this.http
+      .post<UpdateRegistryResponse>(
+        `${this.baseUrl}/${registry.id}`,
+        JSON.stringify({ ...registry }),
+        {
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+      .pipe(take(1));
+  }
+
+  sendEmail(id: number): void {
+    this.http
+      .get(`${this.baseUrl}/send-mail/${id}`)
+      .pipe(take(1))
+      .subscribe({});
   }
 }
