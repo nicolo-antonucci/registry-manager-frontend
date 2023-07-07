@@ -1,13 +1,13 @@
 import { FormControl } from "@angular/forms";
 
 export interface RegistryForm {
-  name: FormControl<string>;
-  surname: FormControl<string>;
-  email: FormControl<string>;
-  address: FormControl<string>;
-  location: FormControl<string>;
-  city: FormControl<string>;
-  province: FormControl<string>;
-  notes: FormControl<string>;
-  id?: FormControl<number>
+  name: FormControl<string | null>;
+  surname: FormControl<string | null>;
+  email: FormControl<string | null>;
+  address: FormControl<string | null>;
+  location: FormControl<string | null>;
+  city: FormControl<string | null>;
+  province: FormControl<string | null>;
+  notes: FormControl<string | null>;
+  id?: FormControl<number>;
 }

@@ -1,1 +1,88 @@
-<p>new-registry works!</p>
+<div class="new-registry-modal">
+  <div class="new-registry-modal-header">Aggiungi una anagrafica</div>
+
+  <div class="new-registry-modal-body">
+    <div class="registry-form" [formGroup]="form">
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Nome*</h4>
+          <input type="text" formControlName="name" />
+        </div>
+        <span class="input-error" *ngIf="missingName">Nome necessario</span>
+        <span class="input-error" *ngIf="invalidName">Nome non valido</span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Cognome*</h4>
+          <input type="text" formControlName="surname" />
+        </div>
+        <span class="input-error" *ngIf="missingSurname">
+          Cognome necessario
+        </span>
+        <span class="input-error" *ngIf="invalidSurname">
+          Cognome non valido
+        </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Indirizzo</h4>
+          <input type="text" formControlName="address" />
+        </div>
+        <span class="input-error" *ngIf="invalidAddress">
+          Indirizzo non valido
+        </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Località</h4>
+          <input type="text" formControlName="location" />
+        </div>
+        <span class="input-error" *ngIf="invalidLocation">
+          Località non valida
+        </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Città</h4>
+          <input type="text" formControlName="city" />
+        </div>
+        <span class="input-error" *ngIf="invalidCity"> Città non valida </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Provincia</h4>
+          <input type="text" formControlName="province" />
+        </div>
+        <span class="input-error" *ngIf="invalidProvince">
+          Provincia non valida
+        </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Email*</h4>
+          <input type="email" formControlName="email" />
+        </div>
+        <span class="input-error" *ngIf="missingEmail"> Email necessaria </span>
+        <span class="input-error" *ngIf="invalidEmail"> Email non valida </span>
+      </div>
+
+      <div class="entry">
+        <div class="input-wrapper">
+          <h4>Note</h4>
+          <input type="text" formControlName="notes" />
+        </div>
+      </div>
+    </div>
+
+    <div class="new-registry-modal-actions">
+      <button class="ok-btn" [disabled]="!form.valid" (click)="add()">Aggiungi</button>
+      <button class="cancel-btn" (click)="dismiss()">Annulla</button>
+    </div>
+  </div>
+</div>

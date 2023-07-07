@@ -7,19 +7,25 @@ import {
 } from "@angular/forms";
 import { Router } from "@angular/router";
 import {
+  faAngleDoubleLeft,
+  faAngleDoubleRight,
+  faAngleLeft,
+  faAngleRight,
   faArrowDown,
   faArrowUp,
   faMagnifyingGlass,
   faPen,
+  faPlus,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Observable, Subscription } from "rxjs";
+import { Observable, Subscription, tap } from "rxjs";
 import { Header } from "src/models/header";
-import { Registry } from "src/models/registry";
+import { NewRegistry, Registry } from "src/models/registry";
 import { ReadRegistriesDto } from "../../../models/read-registries";
 import { RegistryHttpService } from "../../services/registry-http.service";
 import { CustomizableModalComponent } from "../customizable-modal/customizable-modal.component";
+import { NewRegistryComponent } from "../new-registry/new-registry.component";
 
 @Component({
   selector: "app-registries",
@@ -82,11 +88,14 @@ export class RegistriesComponent implements OnDestroy, OnInit {
   }>;
   pageForm!: FormGroup<{
     page: FormControl<number | null>;
-    elementsPerPage: FormControl<number | null>;
+    size: FormControl<number | null>;
   }>;
-  selectedSort!: {
+  selectedSort: {
     value: string;
     descending: boolean;
+  } = {
+    descending: false,
+    value: "name",
   };
 
   readonly faUp = faArrowUp;
@@ -94,6 +103,11 @@ export class RegistriesComponent implements OnDestroy, OnInit {
   readonly faSearch = faMagnifyingGlass;
   readonly faEdit = faPen;
   readonly faDelete = faTrash;
+  readonly faAdd = faPlus;
+  readonly faFirst = faAngleDoubleLeft;
+  readonly faPrevious = faAngleLeft;
+  readonly faNext = faAngleRight;
+  readonly faLast = faAngleDoubleRight;
 
   private sub!: Subscription;
 
@@ -103,6 +117,10 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     private registryHttp: RegistryHttpService,
     private router: Router
   ) {}
+
+  get page(): number {
+    return this.pageForm.value.page ?? 0;
+  }
 
   ngOnInit(): void {
     this.searchForm = this.fb.group({
@@ -117,26 +135,55 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     });
 
     this.pageForm = this.fb.group({
-      elementsPerPage: this.fb.control<number>(5, {
+      size: this.fb.control<number>(20, {
         validators: Validators.min(1),
       }),
-      page: this.fb.control<number>(1, { validators: Validators.min(1) }),
-    });
-    this.sub = this.pageForm.valueChanges.subscribe({
-      next: (value) => {
-        this.registryHttp.getRegistries(
-          value.page ?? 1,
-          value.elementsPerPage ?? 5
-        );
-      },
+      page: this.fb.control<number>(0, { validators: Validators.min(0) }),
     });
 
-    this.data$ = this.registryHttp.registries;
-    this.registryHttp.getRegistries(1, 5);
+    this.data$ = this.registryHttp.registries.pipe(
+      tap((data) => {
+        if (data?.pages && this.page) {
+          this.pageForm.controls.page.setValue(
+            data.page < data.pages ? data.page : data.pages - 1
+          );
+        }
+
+        if (data?.size) {
+          this.pageForm.controls.size.setValue(data.size)
+        }
+      })
+    );
+
+    this.registryHttp.readRegistries(
+      this.searchForm.value,
+      this.page ?? 0,
+      this.pageForm.value.size ?? 20,
+      this.selectedSort.value ?? "name",
+      this.selectedSort.descending ? "desc" : "asc"
+    );
   }
 
   ngOnDestroy(): void {
     if (this.sub) this.sub.unsubscribe();
+  }
+
+  addRegistry(page: number, size: number): void {
+    const modalRef = this.ngbModal.open(NewRegistryComponent, {
+      windowClass: "auto-modal",
+      backdrop: "static",
+      centered: true,
+    });
+    modalRef.result.then((newRegistry: NewRegistry) =>
+      this.registryHttp.postRegistries(
+        newRegistry,
+        this.searchForm.value,
+        page,
+        size,
+        this.selectedSort.value ?? "name",
+        this.selectedSort.descending ? "desc" : "asc"
+      )
+    );
   }
 
   deleteEntry(registry: Registry): void {
@@ -153,8 +200,11 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     modalRef.result.then(() =>
       this.registryHttp.deleteRegistry(
         registry.id,
-        this.pageForm.value.page ?? 1,
-        this.pageForm.value.elementsPerPage ?? 5
+        this.searchForm.value,
+        this.page ?? 0,
+        this.pageForm.value.size ?? 20,
+        this.selectedSort.value ?? "name",
+        this.selectedSort.descending ? "desc" : "asc"
       )
     );
   }
@@ -167,6 +217,16 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     return Array.from({ length: pages }, (value, index) => index + 1);
   }
 
+  goToPage(page: number): void {
+    this.registryHttp.readRegistries(
+      this.searchForm.value,
+      page,
+      this.pageForm.value.size ?? 20,
+      this.selectedSort.value ?? "name",
+      this.selectedSort.descending ? "desc" : "asc"
+    );
+  }
+
   isSelectedSort(value: string, descending: boolean): boolean {
     if (!this.selectedSort) return false;
 
@@ -176,7 +236,27 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     );
   }
 
-  search(header: string): void {}
+  search(): void {
+    this.registryHttp.readRegistries(
+      this.searchForm.value,
+      this.page ?? 0,
+      this.pageForm.value.size ?? 20,
+      this.selectedSort.value ?? "name",
+      this.selectedSort.descending ? "desc" : "asc"
+    );
+  }
 
-  sort(header: string, descending = false): void {}
+  sort(value: string, descending = false): void {
+    this.selectedSort = {
+      descending,
+      value,
+    };
+    this.registryHttp.readRegistries(
+      this.searchForm.value,
+      this.page ?? 0,
+      this.pageForm.value.size ?? 20,
+      this.selectedSort.value ?? "name",
+      this.selectedSort.descending ? "desc" : "asc"
+    );
+  }
 }

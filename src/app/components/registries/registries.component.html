@@ -2,56 +2,68 @@
   <h1>Anagrafiche</h1>
 
   <ng-container *ngIf="data$ | async as data; else loader">
-    <ng-container *ngIf="(data.registries | getSetLength) > 0; else empty">
-      <div class="registries-table">
+    <div class="registries-table">
+      <div
+        class="registries-header"
+        style="--columns: {{ headers.length }}"
+        [formGroup]="searchForm"
+      >
+        <ng-container *ngFor="let header of headers">
+          <div
+            class="header-cell border-right"
+            style="--columns: {{ headers.length + 1 }}"
+          >
+            <span>{{ header.label }}</span>
+            <button class="header-btn" (click)="sort(header.value)">
+              <fa-icon
+                class="sort-icon"
+                [ngClass]="{
+                  'selected-sort': isSelectedSort(header.value, false)
+                }"
+                [icon]="faUp"
+              ></fa-icon>
+            </button>
+            <button class="header-btn" (click)="sort(header.value, true)">
+              <fa-icon
+                class="sort-icon"
+                [ngClass]="{
+                  'selected-sort': isSelectedSort(header.value, true)
+                }"
+                [icon]="faDown"
+              ></fa-icon>
+            </button>
+            <form class="header-search" (onSubmit)="search()">
+              <input
+                class="header-input"
+                formControlName="{{ header.value }}"
+                type="text"
+              />
+              <button class="search-btn" (click)="search()">
+                <fa-icon class="search-icon" [icon]="faSearch"></fa-icon>
+              </button>
+            </form>
+          </div>
+        </ng-container>
+
         <div
-          class="registries-header"
-          style="--columns: {{ headers.length }}"
-          [formGroup]="searchForm"
+          class="header-cell actions"
+          style="--columns: {{ headers.length + 1 }}"
         >
-          <ng-container *ngFor="let header of headers">
-            <div class="header-cell border-right">
-              <span>{{ header.label }}</span>
-              <button class="header-btn" (click)="sort(header.value)">
-                <fa-icon
-                  class="sort-icon"
-                  [ngClass]="{
-                    'selected-sort': isSelectedSort(header.value, false)
-                  }"
-                  [icon]="faUp"
-                ></fa-icon>
-              </button>
-              <button class="header-btn" (click)="sort(header.value, true)">
-                <fa-icon
-                  class="sort-icon"
-                  [ngClass]="{
-                    'selected-sort': isSelectedSort(header.value, true)
-                  }"
-                  [icon]="faDown"
-                ></fa-icon>
-              </button>
-
-              <div class="header-search">
-                <input
-                  class="header-input"
-                  formControlName="{{ header.value }}"
-                  type="text"
-                />
-                <button class="search-btn" (click)="search(header.value)">
-                  <fa-icon class="search-icon" [icon]="faSearch"></fa-icon>
-                </button>
-              </div>
-            </div>
-          </ng-container>
-
-          <div class="header-cell"><span>Azioni</span></div>
+          <button class="add-btn" (click)="addRegistry(data.page, data.size)">
+            <fa-icon class="add-icon" [icon]="faAdd"></fa-icon>
+          </button>
         </div>
+      </div>
 
+      <ng-container *ngIf="(data.registries | getSetLength) > 0; else empty">
         <ng-container *ngFor="let registry of data.registries; let i = index">
           <div
             class="registry-row"
             style="--columns: {{ headers.length }}"
-            [ngClass]="{ 'dark-row': i % 2 === 1 }"
+            [ngClass]="{
+              'dark-row': i % 2 === 1,
+              highlighted: registry.id === data.highlightedElement
+            }"
           >
             <ng-container *ngFor="let header of headers">
               <div
@@ -63,34 +75,71 @@
                 {{ registry | getValue: header.value }}
               </div>
             </ng-container>
-
             <div class="registry-actions">
               <button class="row-btn" (click)="edit(registry)">
-                <fa-icon [icon]="faEdit"></fa-icon>
+                <fa-icon class="row-icon" [icon]="faEdit"></fa-icon>
               </button>
               <button class="row-btn" (click)="deleteEntry(registry)">
-                <fa-icon [icon]="faDelete"></fa-icon>
+                <fa-icon class="row-icon" [icon]="faDelete"></fa-icon>
               </button>
             </div>
           </div>
         </ng-container>
+      </ng-container>
 
-        <div class="registries-pager" [formGroup]="pageForm">
-          <span>Vai alla pagina</span>
-          <select formControlName="page">
-            <ng-container *ngFor="let page of getPages(data.pages)">
-              <option [value]="page">{{ page }}</option>
-            </ng-container>
-          </select>
-          <span></span>
-          <span>Elementi per pagina</span>
-          <input formControlName="elementsPerPage" type="number" />
-        </div>
+      <div class="registries-pager" [formGroup]="pageForm">
+        <button
+          class="go-icon"
+          [disabled]="data.page === 0"
+          (click)="goToPage(0)"
+        >
+          <fa-icon class="go-icon" [icon]="faFirst"></fa-icon>
+        </button>
+        <button
+          class="go-icon"
+          [disabled]="data.page === 0"
+          (click)="goToPage(data.page - 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faPrevious"></fa-icon>
+        </button>
+
+        <span></span>
+
+        <div>Vai alla pagina</div>
+        <select formControlName="page">
+          <ng-container *ngFor="let page of getPages(data.pages)">
+            <option [value]="page - 1">{{ page }}</option>
+          </ng-container>
+        </select>
+        <div>Elementi per pagina</div>
+        <input formControlName="size" type="number" />
+        <button class="go-btn" (click)="goToPage(page)">Vai</button>
+
+        <span></span>
+
+        <button
+          class="go-icon"
+          [disabled]="data.page + 1 === data.pages"
+          (click)="goToPage(data.page + 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faNext"></fa-icon>
+        </button>
+        <button
+          class="go-icon"
+          [disabled]="data.page + 1 === data.pages"
+          (click)="goToPage(data.pages - 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faLast"></fa-icon>
+        </button>
       </div>
-    </ng-container>
+    </div>
   </ng-container>
 </div>
 
 <ng-template #loader></ng-template>
 
-<ng-template #empty></ng-template>
+<ng-template #empty>
+  <div class="empty">
+    Non è stata trovata alcuna anagrafica per i parametri richiesti
+  </div>
+</ng-template>

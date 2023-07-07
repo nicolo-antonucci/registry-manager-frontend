@@ -1,11 +1,8 @@
+import { HttpStatusCode } from "@angular/common/http";
 import { BaseError } from "./base-error";
 
 export interface DeleteRegistryResponseSchema {
+  code: HttpStatusCode;
   success: boolean;
-  payload: DeleteRegistryResponse | null;
-  error?: BaseError | null;
-}
-
-export interface DeleteRegistryResponse {
-  deleted: boolean;
+  error: BaseError;
 }

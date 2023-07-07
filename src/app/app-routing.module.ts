@@ -4,10 +4,15 @@ import { RegistriesComponent } from "./components/registries/registries.componen
 import { ViewRegistryComponent } from "./components/view-registry/view-registry.component";
 
 const routes: Routes = [
+  {
+    path: "",
+    redirectTo: "registries",
+    pathMatch: "full",
+  },
   { path: "registries", component: RegistriesComponent },
   { path: "registry/:id", component: ViewRegistryComponent },
   {
-    path: "",
+    path: "**",
     redirectTo: "registries",
     pathMatch: "full",
   },

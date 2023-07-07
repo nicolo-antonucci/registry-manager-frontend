@@ -5,9 +5,11 @@ import { Registry } from "src/models/registry";
   name: "getValue",
 })
 export class GetValuePipe implements PipeTransform {
-  transform(value: Registry, property: string): string | null | undefined {
-    if (!value || !value.hasOwnProperty(property)) return "N/A";
+  transform(registry: Registry, property: string): string | null | undefined {
+    if (!registry || !registry.hasOwnProperty(property)) return "N/A";
 
-    return (value[property as keyof Registry] as string) ?? "N/A";
+    const value = registry[property as keyof Registry];
+
+    return typeof value === "string" && value.length > 0 ? value : "N/A";
   }
 }
