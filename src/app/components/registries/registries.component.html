@@ -58,11 +58,31 @@
         </div>
       </div>
 
+      <div
+        class="registries-header-mobile"
+        style="--columns: {{ shortHeaders.length }}"
+      >
+        <ng-container *ngFor="let header of shortHeaders">
+          <div
+            class="header-cell border-right"
+            (click)="mobileSort(header.value)"
+          >
+            <span>{{ header.label }}</span>
+            <ng-container *ngIf="selectedSort.sort === header.value">
+              <fa-icon
+                class="sort-icon"
+                [icon]="selectedSort.dir === 'asc' ? faUp : faDown"
+              ></fa-icon>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+
       <ng-container *ngIf="(data.registries | getSetLength) > 0; else empty">
         <ng-container *ngFor="let registry of data.registries; let i = index">
           <div
             class="registry-row"
-            style="--columns: {{ headers.length }}; --colWidth: {{ colWidth }}"
+            style="--columns: {{ headers.length }}"
             [ngClass]="{
               'dark-row': i % 2 === 1,
               highlighted: id && registry.id === id
@@ -88,6 +108,36 @@
                 <fa-icon class="row-icon" [icon]="faMail"></fa-icon>
               </button>
             </div>
+          </div>
+
+          <div
+            class="registry-row-mobile"
+            style="--columns: {{ shortHeaders.length }}"
+            [ngClass]="{
+              'dark-row': i % 2 === 1,
+              highlighted: id && registry.id === id
+            }"
+          >
+            <ng-container *ngFor="let header of shortHeaders">
+              <div
+                class="registry-cell border-right"
+                [ngClass]="{
+                  'not-available': (registry | getValue: header.value) === 'N/A'
+                }"
+              >
+                {{ registry | getValue: header.value }}
+              </div>
+            </ng-container>
+            <!-- <div class="registry-actions">
+              <button class="row-btn" (click)="edit(registry)">
+                <fa-icon class="row-icon" [icon]="faEdit"></fa-icon>
+              </button>
+              <button class="row-btn" (click)="deleteEntry(registry)">
+                <fa-icon class="row-icon" [icon]="faDelete"></fa-icon></button
+              ><button class="row-btn" (click)="sendEmail(registry)">
+                <fa-icon class="row-icon" [icon]="faMail"></fa-icon>
+              </button>
+            </div> -->
           </div>
         </ng-container>
       </ng-container>
@@ -136,6 +186,54 @@
         >
           <fa-icon class="go-icon" [icon]="faLast"></fa-icon>
         </button>
+      </div>
+    </div>
+
+    <div class="mobile-registries">
+      <div class="mobile-registries-actions">
+        <button
+          class="go-icon"
+          [disabled]="data.page === 0"
+          (click)="goToPage(0)"
+        >
+          <fa-icon class="go-icon" [icon]="faFirst"></fa-icon>
+        </button>
+        <button
+          class="go-icon"
+          [disabled]="data.page === 0"
+          (click)="goToPage(data.page - 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faPrevious"></fa-icon>
+        </button>
+        <button (click)="openSearch()">
+          <fa-icon [icon]="faSearch"></fa-icon>
+        </button>
+        <button (click)="addRegistry(data.page, data.size)">
+          <fa-icon [icon]="faAdd"></fa-icon>
+        </button>
+        <button
+          class="go-icon"
+          [disabled]="data.page + 1 === data.pages"
+          (click)="goToPage(data.page + 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faNext"></fa-icon>
+        </button>
+        <button
+          class="go-icon"
+          [disabled]="data.page + 1 === data.pages"
+          (click)="goToPage(data.pages - 1)"
+        >
+          <fa-icon class="go-icon" [icon]="faLast"></fa-icon>
+        </button>
+      </div>
+
+      <div class="mobile-registries-list">
+        <ng-container *ngFor="let registry of data.registries">
+          <app-portrait-registry
+            [registry]="registry"
+            (click)="handleRegistry(registry)"
+          ></app-portrait-registry>
+        </ng-container>
       </div>
     </div>
   </ng-container>

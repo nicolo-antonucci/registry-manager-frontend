@@ -1,0 +1,21 @@
+<div class="handle-registry">
+  <button (click)="edit()">
+    <fa-icon [icon]="faEdit"></fa-icon>
+    <span>Modifica</span>
+  </button>
+
+  <button (click)="sendMail()">
+    <fa-icon [icon]="faMail"></fa-icon>
+    <span>Invia Email</span>
+  </button>
+
+  <button class="red-btn" (click)="deleteRegistry()">
+    <fa-icon [icon]="faDelete"></fa-icon>
+    <span>Elimina</span>
+  </button>
+
+  <button class="close-btn" (click)="dismiss()">
+    <fa-icon [icon]="faXmark"></fa-icon>
+    <span>Chiudi</span>
+  </button>
+</div>

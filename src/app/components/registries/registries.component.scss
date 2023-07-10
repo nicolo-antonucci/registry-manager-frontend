@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: 36px;
-  background-color: #fffbfe;
+  background-color: #ffffff;
   color: #1c1b1f;
 
   h1 {
@@ -62,11 +62,11 @@
 
           &.selected-sort {
             background-color: #6750a4;
-            color: #eaddff;
+            color: #ffffff;
             border-radius: 3px;
 
             .sort-icon {
-              color: #eaddff;
+              color: #ffffff;
             }
           }
         }
@@ -122,13 +122,13 @@
             align-items: center;
             justify-items: center;
             gap: 12px;
-
-            .faicon {
-              color: #21005d;
-            }
           }
         }
       }
+    }
+
+    .registries-header-mobile {
+      display: none;
     }
 
     .registry-row {
@@ -180,6 +180,10 @@
           color: #ffffff;
         }
       }
+    }
+
+    .registry-row-mobile {
+      display: none;
     }
 
     .registries-pager {
@@ -287,6 +291,20 @@
   }
 }
 
+button {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  width: fit-content;
+  background: #6750a4;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
 @media screen and (orientation: landscape) and (max-width: 1599px) {
   .registries {
     padding: 24px;
@@ -374,10 +392,6 @@
               display: flex;
               align-items: center;
               justify-content: center;
-
-              .faicon {
-                color: #ffffff;
-              }
             }
           }
         }
@@ -397,6 +411,54 @@
           padding: 6px;
         }
       }
+
+      .mobile-registries {
+        display: none;
+      }
     }
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 1000px) {
+  .registries {
+    padding: 0;
+
+    h1 {
+      padding: 24px 24px 12px 24px;
+    }
+
+    .registries-table {
+      display: none;
+    }
+
+    .mobile-registries {
+      height: 100%;
+
+      &-actions {
+        overflow: hidden;
+        padding: 12px 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 12px;
+
+        .go-icon {
+          background-color: transparent;
+          color: #6750A4;
+        }
+      }
+
+      &-list {
+        padding: 12px 24px 24px 24px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+    }
+  }
+
+  button {
+    font-size: 0.875rem;
   }
 }

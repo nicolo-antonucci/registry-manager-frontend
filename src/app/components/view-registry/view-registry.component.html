@@ -16,12 +16,12 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="name"
-            [formName]="'name'"
             [invalid]="form | invalidForm: 'name'"
             [invalidMessage]="'Nome non valido'"
             [required]="form | requiredForm: 'name'"
             [requiredMessage]="'Nome necessario'"
             [title]="'Nome*'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('name', registry)"
           ></app-input>
         </ng-container>
@@ -40,12 +40,12 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="surname"
-            [formName]="'surname'"
             [invalid]="form | invalidForm: 'surname'"
             [invalidMessage]="'Cognome non valido'"
             [required]="form | requiredForm: 'surname'"
             [requiredMessage]="'Cognome necessario'"
             [title]="'Cognome*'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('surname', registry)"
           ></app-input>
         </ng-container>
@@ -64,10 +64,10 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="address"
-            [formName]="'address'"
             [invalid]="form | invalidForm: 'address'"
             [invalidMessage]="'Indirizzo non valido'"
             [title]="'Indirizzo'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('address', registry)"
           ></app-input>
         </ng-container>
@@ -86,10 +86,10 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="location"
-            [formName]="'location'"
             [invalid]="form | invalidForm: 'location'"
             [invalidMessage]="'Località non valida'"
             [title]="'Località'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('location', registry)"
           ></app-input>
         </ng-container>
@@ -108,10 +108,10 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="city"
-            [formName]="'city'"
             [invalid]="form | invalidForm: 'city'"
             [invalidMessage]="'Città non valida'"
             [title]="'Città'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('city', registry)"
           ></app-input>
         </ng-container>
@@ -130,10 +130,10 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="province"
-            [formName]="'province'"
             [invalid]="form | invalidForm: 'province'"
             [invalidMessage]="'Provincia non valida'"
             [title]="'Provincia'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('province', registry)"
           ></app-input>
         </ng-container>
@@ -152,12 +152,12 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="email"
-            [formName]="'email'"
             [invalid]="form | invalidForm: 'email'"
             [invalidMessage]="'Email non valida'"
             [required]="form | requiredForm: 'email'"
             [requiredMessage]="'Email richiesta'"
             [title]="'Email*'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('email', registry)"
           ></app-input>
         </ng-container>
@@ -176,8 +176,8 @@
         <ng-container *ngSwitchCase="true">
           <app-input
             formControlName="notes"
-            [formName]="'notes'"
             [title]="'Note'"
+            [toggleable]="true"
             (toggleEmitter)="toggleEdit('notes', registry)"
           ></app-input>
         </ng-container>
@@ -186,14 +186,13 @@
 
     <div class="actions">
       <button
-        class="save-btn"
         [disabled]="!getFormChanged(registry) || !form.valid"
         (click)="save()"
       >
         Salva le modifiche
       </button>
 
-      <button class="go-back-btn" (click)="goBack()">Torna indietro</button>
+      <button class="close-btn" (click)="goBack()">Torna indietro</button>
     </div>
   </div>
 </ng-container>
@@ -205,7 +204,7 @@
     <div style="text-align: center">Anagrafica non trovata</div>
 
     <div class="actions">
-      <button class="save-btn" (click)="goBack()">Torna indietro</button>
+      <button class="close-btn" (click)="goBack()">Torna indietro</button>
     </div>
   </div>
 </ng-template>

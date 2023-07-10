@@ -31,10 +31,16 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Observable, Subscription, tap } from "rxjs";
 import { Header } from "src/models/header";
 import { NewRegistry, Registry } from "src/models/registry";
-import { ReadRegistriesDto } from "../../../models/read-registries";
+import {
+  ReadRegistriesBody,
+  ReadRegistriesDto,
+} from "../../../models/read-registries";
 import { RegistryHttpService } from "../../services/registry-http.service";
 import { CustomizableModalComponent } from "../customizable-modal/customizable-modal.component";
 import { NewRegistryComponent } from "../new-registry/new-registry.component";
+import { SearchModalComponent } from "../search-modal/search-modal.component";
+import { HandleRegistryModalComponent } from "../handle-registry-modal/handle-registry-modal.component";
+import { HandleRegistryEvent } from "src/models/enums";
 
 @Component({
   selector: "app-registries",
@@ -135,6 +141,12 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
     private router: Router
   ) {}
 
+  get shortHeaders(): Header[] {
+    return this.headers.filter(
+      (h) => h.value === "name" || h.value === "surname" || h.value === "email"
+    );
+  }
+
   get page(): number {
     return this.pageForm.value.page ?? 0;
   }
@@ -148,10 +160,23 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
 
     if (width <= 1200) actionWidth = 96;
 
+    const headerCols =
+      width <= 1200 ? this.shortHeaders.length : this.headers.length;
+
     const colWidth = Math.floor(
-      (this.tableEl.nativeElement.clientWidth - actionWidth) / this.headers.length
+      (this.tableEl.nativeElement.clientWidth - actionWidth) / headerCols
     );
     this.colWidth = `${colWidth}px`;
+  }
+
+  @HostListener("window:resize", ["$event"])
+  getRowsNumber(): void {
+    const height = window.innerHeight;
+    const width = window.innerWidth;
+
+    if (width < height) {
+      this.pageForm.controls.size.setValue(Math.floor((height - 300) / 100));
+    }
   }
 
   ngOnInit(): void {
@@ -198,6 +223,8 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
       })
     );
 
+    this.getRowsNumber();
+
     this.registryHttp.readRegistries(this.searchForm.value, {
       page: this.page ?? null,
       size: this.pageForm.value.size ?? null,
@@ -221,7 +248,6 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
 
   addRegistry(page: number, size: number): void {
     const modalRef = this.ngbModal.open(NewRegistryComponent, {
-      windowClass: "auto-modal",
       backdrop: "static",
       centered: true,
     });
@@ -246,7 +272,6 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
 
   deleteEntry(registry: Registry): void {
     const modalRef = this.ngbModal.open(CustomizableModalComponent, {
-      windowClass: "small-modal",
       backdrop: "static",
       centered: true,
     });
@@ -284,14 +309,72 @@ export class RegistriesComponent implements AfterViewInit, OnDestroy, OnInit {
     this.cleanupRoute();
   }
 
+  handleRegistry(registry: Registry): void {
+    const modalRef = this.ngbModal.open(HandleRegistryModalComponent, {
+      backdrop: "static",
+      centered: true,
+    });
+    modalRef.result.then((result) => {
+      switch (result) {
+        case HandleRegistryEvent.DELETE:
+          this.deleteEntry(registry);
+          break;
+        case HandleRegistryEvent.EDIT:
+          this.edit(registry);
+          break;
+        case HandleRegistryEvent.MAIL:
+          this.sendEmail(registry);
+          break;
+      }
+    });
+  }
+
   isSelectedSort(sort: string, dir: "asc" | "desc"): boolean {
     if (!this.selectedSort) return false;
 
     return this.selectedSort.sort === sort && this.selectedSort.dir === dir;
   }
 
-  openSearch(): void {
+  mobileSort(value: string): void {
+    this.selectedSort = {
+      dir:
+        this.selectedSort.sort === value
+          ? "asc"
+          : this.selectedSort.dir === "asc"
+          ? "desc"
+          : "asc",
+      sort: value,
+    };
 
+    this.cleanupRoute();
+
+    this.registryHttp.readRegistries(this.searchForm.value, {
+      page: this.page ?? null,
+      size: this.pageForm.value.size ?? null,
+      sort: this.selectedSort.sort,
+      dir: this.selectedSort.dir,
+    });
+  }
+
+  openSearch(): void {
+    const modalRef = this.ngbModal.open(SearchModalComponent, {
+      backdrop: "static",
+      centered: true,
+    });
+    modalRef.componentInstance.initialValue = this.searchForm.value;
+    modalRef.result.then((searchValues: ReadRegistriesBody) => {
+      Object.keys(searchValues).forEach((k) => {
+        const val = searchValues[k as keyof ReadRegistriesBody];
+        if (val) this.searchForm.get(k)?.setValue(val);
+      });
+
+      this.registryHttp.readRegistries(searchValues, {
+        page: this.pageForm.value.page ?? null,
+        size: this.pageForm.value.size ?? null,
+        sort: this.selectedSort.sort,
+        dir: this.selectedSort.dir,
+      });
+    });
   }
 
   search(): void {

@@ -1,0 +1,65 @@
+.search-modal {
+  // &-header {
+  //   padding: 6px 12px;
+  //   background-color: #fffbfe;
+  //   color: #1c1b1f;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: center;
+  //   gap: 12px;
+  //   font-size: 1rem;
+
+  //   span {
+  //     flex-grow: 1;
+  //   }
+
+  //   button {
+  //     border: none;
+  //     border-radius: 6px;
+  //     height: 32px;
+  //     width: 32px;
+  //     display: flex;
+  //     align-items: center;
+  //     justify-content: center;
+  //   }
+
+  //   .ok-btn {
+  //     background-color: #6750a4;
+  //     color: #ffffff;
+  //   }
+
+  //   .cancel-btn {
+  //     background-color: #b3261e;
+  //     color: #ffffff;
+  //   }
+  // }
+
+  &-body {
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    row-gap: 12px;
+    column-gap: 24px;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 1000px) {
+  .search-modal .search-modal-body {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 1000px) {
+  .search-modal {
+    height: 100vh;
+
+    &-body {
+      padding: 24px 60px;
+      row-gap: 6px;
+      column-gap: 12px;
+    }
+  }
+}

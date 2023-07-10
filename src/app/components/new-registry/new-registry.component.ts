@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { faPlus, faXmark } from "@fortawesome/free-solid-svg-icons";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { NewRegistryForm } from "src/models/registry-form";
 
@@ -15,6 +16,8 @@ export class NewRegistryComponent implements OnInit {
   readonly addressRegex =
     /^(piazza|via|viale)\s[A-Z][A-Za-z']+(\s[A-Za-z']+)*$/;
   readonly cityRegex = /^([A-Z][A-Za-z']+(\s[A-Za-z']+)*)$/;
+  readonly faAdd = faPlus;
+  readonly faXmark = faXmark;
 
   constructor(private activeModal: NgbActiveModal, private fb: FormBuilder) {}
 

@@ -24,6 +24,10 @@
     gap: 12px;
     align-items: center;
     justify-content: center;
+
+    .customizable-modal-text {
+      text-align: center;
+    }
   }
 
   &-actions {

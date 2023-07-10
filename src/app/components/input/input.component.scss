@@ -7,35 +7,37 @@
 
   .input-wrapper {
     width: 100%;
-    border: 1px solid #625b71;
     border-radius: 6px;
     overflow: hidden;
     display: flex;
     align-items: center;
 
     h4 {
+      height: 32px;
+      border-radius: 6px 0 0 6px;
       margin: 0;
       padding: 6px 12px;
-      border-right: 1px solid #625b71;
-      background-color: #e8def8;
-      color: #1d192b;
+      background-color: #e7e0ec;
       font-size: 1.25rem;
       font-weight: 400;
     }
 
     input {
+      height: 32px;
+      background-color: #e7e0ec;
       flex-grow: 1;
       min-width: 240px;
       margin: 0;
       padding: 6px;
-      height: 100%;
       border: none;
       outline: none;
     }
 
     button {
+      height: 32px;
       padding: 6px 12px;
       border: none;
+      border-radius: 0 6px 6px 0;
       background-color: #b3261e;
       color: #ffffff;
     }
@@ -46,5 +48,21 @@
     font-weight: 300;
     font-style: italic;
     color: #b3261e;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .entry .input-wrapper h4,
+  .entry .input-wrapper input {
+    font-size: 0.875rem;
+    line-height: 20px;
+  }
+
+  .entry .input-wrapper h4 {
+    font-style: italic;
+  }
+
+  .entry .input-wrapper input {
+    min-width: 120px;
   }
 }

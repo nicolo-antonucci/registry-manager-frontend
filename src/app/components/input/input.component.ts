@@ -23,11 +23,11 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 })
 export class InputComponent implements ControlValueAccessor, OnInit {
   @Input() title!: string;
-  @Input() formName!: string;
   @Input() required = false;
   @Input() invalid = false;
   @Input() requiredMessage!: string;
   @Input() invalidMessage!: string;
+  @Input() toggleable = false;
   @Input() value!: string;
 
   @Output() toggleEmitter: EventEmitter<void> = new EventEmitter();
