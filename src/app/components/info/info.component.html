@@ -1,0 +1,7 @@
+<div class="info">
+  <h4>{{ title }}</h4>
+  <span>{{ registry | getProp: propName }}</span>
+  <button (click)="toggleEmitter.emit()">
+    <fa-icon [icon]="faPen"></fa-icon>
+  </button>
+</div>

@@ -1,0 +1,47 @@
+.portrait-registries {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+
+    span {
+      flex-grow: 1;
+    }
+
+    .go-btn {
+      background-color: transparent;
+      color: #21005d;
+
+      &:disabled {
+        background-color: transparent;
+        color: #79747e;
+      }
+    }
+  }
+
+  &-list {
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .portrait-registries {
+    gap: 12px;
+
+    &-actions {
+      gap: 12px;
+    }
+
+    &-list {
+      gap: 12px;
+    }
+  }
+}

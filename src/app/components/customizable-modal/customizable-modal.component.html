@@ -1,0 +1,15 @@
+<div class="customizable-mdl">
+  <div class="mdl-header">
+    <h1>{{ title }}</h1>
+  </div>
+
+  <div class="mdl-text">{{ text }}</div>
+
+  <div class="mdl-actions">
+    <button (click)="close()">{{ okBtnLabel }}</button>
+
+    <button *ngIf="cancelBtnLabel" class="close-btn" (click)="dismiss()">
+      {{ cancelBtnLabel }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,49 @@
+.search-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &-body {
+    overflow-y: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 999px) {
+  .search-modal .search-modal-body {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .search-modal {
+    gap: 12px;
+
+
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 999px) {
+  .search-modal {
+    gap: 12px;
+
+    .mdl-header {
+      h1 {
+        font-size: 1rem;
+      }
+
+      button {
+        display: block;
+      }
+    }
+
+    &-body {
+      gap: 12px;
+    }
+  }
+}

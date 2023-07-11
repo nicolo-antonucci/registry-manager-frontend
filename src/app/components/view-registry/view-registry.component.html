@@ -1,0 +1,210 @@
+<ng-container *ngIf="registry$ | async as registry; else notFound">
+  <div class="registry">
+    <h1>Dettaglio Anagrafica</h1>
+
+    <div class="details" [formGroup]="form">
+      <ng-container [ngSwitch]="editName">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Nome'"
+            [propName]="'name'"
+            (toggleEmitter)="toggleEdit('name')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="name"
+            [invalid]="form | invalidForm: 'name'"
+            [invalidMessage]="'Nome non valido'"
+            [required]="form | requiredForm: 'name'"
+            [requiredMessage]="'Nome necessario'"
+            [title]="'Nome*'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('name', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editSurname">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Cognome'"
+            [propName]="'surname'"
+            (toggleEmitter)="toggleEdit('surname')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="surname"
+            [invalid]="form | invalidForm: 'surname'"
+            [invalidMessage]="'Cognome non valido'"
+            [required]="form | requiredForm: 'surname'"
+            [requiredMessage]="'Cognome necessario'"
+            [title]="'Cognome*'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('surname', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editAddress">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Indirizzo'"
+            [propName]="'address'"
+            (toggleEmitter)="toggleEdit('address')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="address"
+            [invalid]="form | invalidForm: 'address'"
+            [invalidMessage]="'Indirizzo non valido'"
+            [title]="'Indirizzo'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('address', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editLocation">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Località'"
+            [propName]="'location'"
+            (toggleEmitter)="toggleEdit('location')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="location"
+            [invalid]="form | invalidForm: 'location'"
+            [invalidMessage]="'Località non valida'"
+            [title]="'Località'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('location', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editCity">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Città'"
+            [propName]="'city'"
+            (toggleEmitter)="toggleEdit('city')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="city"
+            [invalid]="form | invalidForm: 'city'"
+            [invalidMessage]="'Città non valida'"
+            [title]="'Città'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('city', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editProvince">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Provincia'"
+            [propName]="'province'"
+            (toggleEmitter)="toggleEdit('province')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="province"
+            [invalid]="form | invalidForm: 'province'"
+            [invalidMessage]="'Provincia non valida'"
+            [title]="'Provincia'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('province', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editEmail">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Email'"
+            [propName]="'email'"
+            (toggleEmitter)="toggleEdit('email')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="email"
+            [invalid]="form | invalidForm: 'email'"
+            [invalidMessage]="'Email non valida'"
+            [required]="form | requiredForm: 'email'"
+            [requiredMessage]="'Email richiesta'"
+            [title]="'Email*'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('email', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+
+      <ng-container [ngSwitch]="editNotes">
+        <ng-container *ngSwitchCase="false">
+          <app-info
+            [registry]="registry"
+            [title]="'Note'"
+            [propName]="'notes'"
+            (toggleEmitter)="toggleEdit('notes')"
+          ></app-info>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="true">
+          <app-input
+            formControlName="notes"
+            [title]="'Note'"
+            [toggleable]="true"
+            (toggleEmitter)="toggleEdit('notes', registry)"
+          ></app-input>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <div class="actions">
+      <button
+        [disabled]="!getFormChanged(registry) || !form.valid"
+        (click)="save()"
+      >
+        Salva le modifiche
+      </button>
+
+      <button class="close-btn" (click)="goBack()">Torna indietro</button>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #notFound>
+  <div class="registry">
+    <h1>Errore</h1>
+
+    <div style="text-align: center">Anagrafica non trovata</div>
+
+    <div class="actions">
+      <button class="close-btn" (click)="goBack()">Torna indietro</button>
+    </div>
+  </div>
+</ng-template>

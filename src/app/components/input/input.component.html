@@ -1,0 +1,11 @@
+<div class="entry">
+  <div class="input-wrapper">
+    <h4>{{ title }}</h4>
+    <input type="text" [ngModel]="value" (ngModelChange)="writeValue($event)" />
+    <button *ngIf="toggleable" (click)="toggleEmitter.emit()">
+      <fa-icon [icon]="faCancel"></fa-icon>
+    </button>
+  </div>
+  <span class="input-error" *ngIf="required">{{ requiredMessage }}</span>
+  <span class="input-error" *ngIf="invalid">{{ invalidMessage }}</span>
+</div>

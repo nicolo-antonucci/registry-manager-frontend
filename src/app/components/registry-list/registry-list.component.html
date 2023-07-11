@@ -1,0 +1,57 @@
+<ng-container *ngIf="data; else empty">
+  <div class="portrait-registries">
+    <div class="portrait-registries-actions">
+      <button
+        class="go-btn"
+        [disabled]="data.page === 0"
+        (click)="goToPage(0)"
+      >
+        <fa-icon [icon]="faFirst"></fa-icon>
+      </button>
+      <button
+        class="go-btn"
+        [disabled]="data.page === 0"
+        (click)="goToPage(data.page - 1)"
+      >
+        <fa-icon [icon]="faPrevious"></fa-icon>
+      </button>
+
+      <span></span>
+
+      <button (click)="openSearch()">
+        <fa-icon [icon]="faSearch"></fa-icon>
+      </button>
+      <button (click)="addRegistryRequested.emit({page, size, sort, dir})">
+        <fa-icon [icon]="faAdd"></fa-icon>
+      </button>
+
+      <span></span>
+
+      <button
+        class="go-btn"
+        [disabled]="data.page + 1 === data.pages"
+        (click)="goToPage(data.page + 1)"
+      >
+        <fa-icon [icon]="faNext"></fa-icon>
+      </button>
+      <button
+        class="go-btn"
+        [disabled]="data.page + 1 === data.pages"
+        (click)="goToPage(data.pages - 1)"
+      >
+        <fa-icon [icon]="faLast"></fa-icon>
+      </button>
+    </div>
+
+    <div class="portrait-registries-list">
+      <ng-container *ngFor="let registry of data.registries">
+        <app-portrait-registry
+          [registry]="registry"
+          (click)="handleRegistryRequested.emit(registry)"
+        ></app-portrait-registry>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #empty></ng-template>

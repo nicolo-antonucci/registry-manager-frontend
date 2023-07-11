@@ -1,0 +1,68 @@
+.info {
+  background-color: #e7e0ec;
+  height: 36px;
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+
+  h4 {
+    height: 36px;
+    border-radius: 6px 0 0 6px;
+    margin: 0;
+    padding: 6px 12px;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 24px;
+  }
+
+  span {
+    height: 36px;
+    flex-grow: 1;
+    min-width: 240px;
+    margin: 0;
+    padding: 6px;
+    border: none;
+    outline: none;
+    line-height: 24px;
+  }
+
+  button {
+    height: 36px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    background-color: #6750a4;
+    color: #ffffff;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 1199px) {
+  .info h4,
+  .info span {
+    font-size: 0.875rem;
+  }
+
+  .info span {
+    min-width: 120px;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 1199px) {
+  .info h4,
+  .info span {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .info h4,
+  .info span {
+    font-size: 0.875rem;
+  }
+
+  .info span {
+    min-width: 84px;
+  }
+}

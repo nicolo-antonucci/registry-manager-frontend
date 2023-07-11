@@ -1,0 +1,28 @@
+.customizable-mdl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+
+  .mdl-text {
+    text-align: center;
+  }
+
+  .mdl-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .customizable-mdl {
+    gap: 12px;
+
+    .mdl-text {
+      font-size: 0.875rem;
+      margin-bottom: 12px;
+    }
+  }
+}

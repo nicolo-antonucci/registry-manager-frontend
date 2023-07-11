@@ -1,0 +1,127 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* Import Bootstrap */
+@import "./node_modules/bootstrap/scss/bootstrap";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+app-root {
+  width: 100vw;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.mdl-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  h1 {
+    margin: 0;
+    flex-grow: 1;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  button {
+    display: none;
+  }
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  width: fit-content;
+  background: #6750a4;
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  &:disabled {
+    color: #49454f;
+    background-color: #e7e0ec;
+  }
+}
+
+.close-btn {
+  background-color: #625b71;
+}
+
+.red-btn {
+  background-color: #b3261e;
+}
+
+.modal {
+  height: 100%;
+  width: 100%;
+
+  .modal-dialog {
+    max-width: fit-content;
+
+    .modal-content {
+      overflow: hidden;
+      border: none;
+      padding: 24px;
+      background-color: #fffbfe;
+      height: fit-content;
+    }
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 1000px) {
+  .mdl-header {
+    h1 {
+      font-size: 0.875rem;
+    }
+
+    button {
+      display: block;
+    }
+  }
+
+  .modal .modal-dialog {
+    max-width: 90vw;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-right: 5vw;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .mdl-header {
+    h1 {
+      font-size: 0.875rem;
+    }
+
+    button {
+      display: block;
+    }
+  }
+
+  .modal .modal-dialog .modal-content {
+    padding: 12px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 999px) {
+  .modal .modal-dialog .modal-content {
+    padding: 12px;
+  }
+}
+
+@media screen and (max-width: 999px) {
+  button {
+    font-size: 0.875rem;
+  }
+
+}

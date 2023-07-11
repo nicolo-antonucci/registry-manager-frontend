@@ -1,0 +1,54 @@
+{
+  "root": true,
+  "ignorePatterns": ["src/api/**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "project": ["tsconfig.json"],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@typescript-eslint/recommended",
+        "plugin:@angular-eslint/recommended",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@typescript-eslint/explicit-function-return-type": ["error"],
+        "@typescript-eslint/member-ordering": ["error"],
+        "@typescript-eslint/no-non-null-asserted-nullish-coalescing": ["error"],
+        "@typescript-eslint/no-shadow": ["error"],
+        "@typescript-eslint/no-unused-vars": "error",
+        "@typescript-eslint/no-unused-expressions": "error",
+        "eqeqeq": "error",
+        "no-console": ["warn"],
+        "no-shadow": "off",
+        "no-shadow-restricted-names": ["error"],
+        "object-shorthand": ["error"],
+        "prefer-const": ["error"]
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@angular-eslint/template/recommended"],
+      "rules": {}
+    }
+  ]
+}

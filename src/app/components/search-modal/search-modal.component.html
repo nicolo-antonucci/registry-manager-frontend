@@ -1,0 +1,22 @@
+<div class="search-modal">
+  <div class="mdl-header">
+    <h1>RICERCA</h1>
+
+    <button (click)="close()">
+      <fa-icon class="sort-icon" [icon]="faSearch"></fa-icon>
+    </button>
+
+    <button class="close-btn" (click)="dismiss()">
+      <fa-icon class="sort-icon" [icon]="faCancel"></fa-icon>
+    </button>
+  </div>
+
+  <div class="search-modal-body" [formGroup]="form">
+    <ng-container *ngFor="let key of formKeys">
+      <app-input
+        formControlName="{{ key }}"
+        [title]="key | toFormTitle"
+      ></app-input>
+    </ng-container>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="registries">
+  <h1>Anagrafiche</h1>
+
+  <ng-container *ngIf="data$ | async as data; else loader">
+    <app-registry-table
+      class="landscape-registries"
+      [data]="data"
+      (actionRequested)="handleActionRequest($event)"
+      (addRegistryRequested)="addRegistry($event)"
+      (dataRequested)="requestData($event)"
+    ></app-registry-table>
+
+    <app-registry-list
+      class="portrait-registries"
+      [data]="data"
+      (handleRegistryRequested)="handleRegistry($event)"
+      (addRegistryRequested)="addRegistry($event)"
+      (dataRequested)="requestData($event)"
+    ></app-registry-list>
+  </ng-container>
+</div>
+
+<ng-template #loader>
+  <div class="loader-container">
+    <div class="loader"></div>
+  </div>
+</ng-template>
