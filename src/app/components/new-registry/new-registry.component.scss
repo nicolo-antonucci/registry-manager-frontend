@@ -63,3 +63,9 @@
     }
   }
 }
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .new-registry .mdl-header h1 {
+    font-size: 0.875rem;
+  }
+}

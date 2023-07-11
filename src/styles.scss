@@ -97,8 +97,31 @@ button {
   }
 }
 
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .mdl-header {
+    h1 {
+      font-size: 0.875rem;
+    }
+
+    button {
+      display: block;
+    }
+  }
+
+  .modal .modal-dialog .modal-content {
+    padding: 12px;
+  }
+}
+
 @media screen and (orientation: landscape) and (max-width: 999px) {
   .modal .modal-dialog .modal-content {
     padding: 12px;
   }
+}
+
+@media screen and (max-width: 999px) {
+  button {
+    font-size: 0.875rem;
+  }
+
 }

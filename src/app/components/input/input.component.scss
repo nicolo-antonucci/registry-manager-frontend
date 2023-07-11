@@ -71,3 +71,21 @@
     font-size: 0.75rem;
   }
 }
+
+@media screen and (orientation: portrait) and (max-width: 1199px) {
+  .entry .input-wrapper h4,
+  .entry .input-wrapper input {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .entry .input-wrapper h4,
+  .entry .input-wrapper input {
+    font-size: 0.875rem;
+  }
+
+  .entry .input-wrapper input {
+    min-width: 84px;
+  }
+}

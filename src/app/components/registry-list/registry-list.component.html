@@ -2,38 +2,44 @@
   <div class="portrait-registries">
     <div class="portrait-registries-actions">
       <button
-        class="go-icon"
+        class="go-btn"
         [disabled]="data.page === 0"
         (click)="goToPage(0)"
       >
-        <fa-icon class="go-icon" [icon]="faFirst"></fa-icon>
+        <fa-icon [icon]="faFirst"></fa-icon>
       </button>
       <button
-        class="go-icon"
+        class="go-btn"
         [disabled]="data.page === 0"
         (click)="goToPage(data.page - 1)"
       >
-        <fa-icon class="go-icon" [icon]="faPrevious"></fa-icon>
+        <fa-icon [icon]="faPrevious"></fa-icon>
       </button>
+
+      <span></span>
+
       <button (click)="openSearch()">
         <fa-icon [icon]="faSearch"></fa-icon>
       </button>
       <button (click)="addRegistryRequested.emit({page, size, sort, dir})">
         <fa-icon [icon]="faAdd"></fa-icon>
       </button>
+
+      <span></span>
+
       <button
-        class="go-icon"
+        class="go-btn"
         [disabled]="data.page + 1 === data.pages"
         (click)="goToPage(data.page + 1)"
       >
-        <fa-icon class="go-icon" [icon]="faNext"></fa-icon>
+        <fa-icon [icon]="faNext"></fa-icon>
       </button>
       <button
-        class="go-icon"
+        class="go-btn"
         [disabled]="data.page + 1 === data.pages"
         (click)="goToPage(data.pages - 1)"
       >
-        <fa-icon class="go-icon" [icon]="faLast"></fa-icon>
+        <fa-icon [icon]="faLast"></fa-icon>
       </button>
     </div>
 

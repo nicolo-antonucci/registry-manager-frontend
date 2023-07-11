@@ -55,7 +55,8 @@ export class RegistriesComponent implements OnDestroy, OnInit {
     const width = window.innerWidth;
 
     if (width < height) {
-      this.size = Math.floor((height - 300) / 100);
+      if (width < 640) this.size = Math.floor((height - 100) / 100);
+      else this.size = Math.floor((height - 240) / 70);
     } else {
       if (width < 1200) this.size = Math.floor((height - 200) / 36);
       else this.size = Math.floor((height - 300) / 36);

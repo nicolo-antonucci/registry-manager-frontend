@@ -48,3 +48,21 @@
     min-width: 120px;
   }
 }
+
+@media screen and (orientation: portrait) and (max-width: 1199px) {
+  .info h4,
+  .info span {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .info h4,
+  .info span {
+    font-size: 0.875rem;
+  }
+
+  .info span {
+    min-width: 84px;
+  }
+}

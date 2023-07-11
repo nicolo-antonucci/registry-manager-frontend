@@ -69,3 +69,16 @@
     }
   }
 }
+
+@media screen and (orientation: portrait) and (max-width: 639px) {
+  .registry {
+    padding: 12px;
+    gap: 12px;
+
+    .details {
+      margin: 0;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+  }
+}
