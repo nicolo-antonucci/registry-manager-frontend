@@ -75,10 +75,9 @@ export class RegistryHttpService {
             centered: true,
           });
           modalRef.componentInstance.title = "Attenzione";
-          modalRef.componentInstance.body =
+          modalRef.componentInstance.text =
             "Si è verificato un errore nel caricamento delle anagrafiche";
           modalRef.componentInstance.okBtnLabel = "Riprova";
-          modalRef.componentInstance.cancelBtnLabel = "Chiudi";
           modalRef.result.then(
             () => {
               this.readRegistries(readRegistriesBody, pageParams);
@@ -140,14 +139,14 @@ export class RegistryHttpService {
           switch (error.code) {
             case HttpStatusCode.BadRequest:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile creare l'anagrafica";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;
 
             case HttpStatusCode.Conflict:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile eliminare l'anagrafica, si è verificato un conflitto";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;
@@ -185,28 +184,28 @@ export class RegistryHttpService {
           switch (error.code) {
             case HttpStatusCode.BadRequest:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile eliminare l'anagrafica, è stato passato un id invalido";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;
 
             case HttpStatusCode.Conflict:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile eliminare l'anagrafica, si è verificato un conflitto";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;
 
             case HttpStatusCode.NotFound:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile trovare ed eliminare l'anagrafica richiesta";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;
 
             default:
               modalRef.componentInstance.title = "Attenzione";
-              modalRef.componentInstance.body =
+              modalRef.componentInstance.text =
                 "Non è stato possibile eliminare l'anagrafica a causa di un errore interno";
               modalRef.componentInstance.okBtnLabel = "Chiudi";
               break;

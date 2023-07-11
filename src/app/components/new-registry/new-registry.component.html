@@ -9,71 +9,67 @@
     </button>
   </div>
 
-  <div class="new-registry-body">
-    <div class="registry-form" [formGroup]="form">
-      <app-input
-        formControlName="name"
-        [invalid]="form | invalidForm: 'name'"
-        [invalidMessage]="'Nome non valido'"
-        [required]="form | requiredForm: 'name'"
-        [requiredMessage]="'Nome necessario'"
-        [title]="'Nome*'"
-      ></app-input>
+  <div class="registry-form" [formGroup]="form">
+    <app-input
+      formControlName="name"
+      [invalid]="form | invalidForm: 'name'"
+      [invalidMessage]="'Nome non valido'"
+      [required]="form | requiredForm: 'name'"
+      [requiredMessage]="'Nome necessario'"
+      [title]="'Nome*'"
+    ></app-input>
 
-      <app-input
-        formControlName="surname"
-        [invalid]="form | invalidForm: 'surname'"
-        [invalidMessage]="'Cognome non valido'"
-        [required]="form | requiredForm: 'surname'"
-        [requiredMessage]="'Cognome necessario'"
-        [title]="'Cognome*'"
-      ></app-input>
+    <app-input
+      formControlName="surname"
+      [invalid]="form | invalidForm: 'surname'"
+      [invalidMessage]="'Cognome non valido'"
+      [required]="form | requiredForm: 'surname'"
+      [requiredMessage]="'Cognome necessario'"
+      [title]="'Cognome*'"
+    ></app-input>
 
-      <app-input
-        formControlName="address"
-        [invalid]="form | invalidForm: 'address'"
-        [invalidMessage]="'Indirizzo non valido'"
-        [title]="'Indirizzo'"
-      ></app-input>
+    <app-input
+      formControlName="address"
+      [invalid]="form | invalidForm: 'address'"
+      [invalidMessage]="'Indirizzo non valido'"
+      [title]="'Indirizzo'"
+    ></app-input>
 
-      <app-input
-        formControlName="location"
-        [invalid]="form | invalidForm: 'location'"
-        [invalidMessage]="'Località non valida'"
-        [title]="'Località'"
-      ></app-input>
+    <app-input
+      formControlName="location"
+      [invalid]="form | invalidForm: 'location'"
+      [invalidMessage]="'Località non valida'"
+      [title]="'Località'"
+    ></app-input>
 
-      <app-input
-        formControlName="city"
-        [invalid]="form | invalidForm: 'city'"
-        [invalidMessage]="'Città non valida'"
-        [title]="'Città'"
-      ></app-input>
+    <app-input
+      formControlName="city"
+      [invalid]="form | invalidForm: 'city'"
+      [invalidMessage]="'Città non valida'"
+      [title]="'Città'"
+    ></app-input>
 
-      <app-input
-        formControlName="province"
-        [invalid]="form | invalidForm: 'province'"
-        [invalidMessage]="'Provincia non valida'"
-        [title]="'Provincia'"
-      ></app-input>
+    <app-input
+      formControlName="province"
+      [invalid]="form | invalidForm: 'province'"
+      [invalidMessage]="'Provincia non valida'"
+      [title]="'Provincia'"
+    ></app-input>
 
-      <app-input
-        formControlName="email"
-        [invalid]="form | invalidForm: 'email'"
-        [invalidMessage]="'Email non valida'"
-        [required]="form | requiredForm: 'email'"
-        [requiredMessage]="'Email richiesta'"
-        [title]="'Email*'"
-      ></app-input>
+    <app-input
+      formControlName="email"
+      [invalid]="form | invalidForm: 'email'"
+      [invalidMessage]="'Email non valida'"
+      [required]="form | requiredForm: 'email'"
+      [requiredMessage]="'Email richiesta'"
+      [title]="'Email*'"
+    ></app-input>
 
-      <app-input formControlName="notes" [title]="'Note'"></app-input>
-    </div>
+    <app-input formControlName="notes" [title]="'Note'"></app-input>
+  </div>
 
-    <div class="new-registry-actions">
-      <button class="ok-btn" [disabled]="!form.valid" (click)="add()">
-        Aggiungi
-      </button>
-      <button class="cancel-btn" (click)="dismiss()">Annulla</button>
-    </div>
+  <div class="new-registry-actions">
+    <button [disabled]="!form.valid" (click)="add()">Aggiungi</button>
+    <button class="close-btn" (click)="dismiss()">Annulla</button>
   </div>
 </div>

@@ -1,15 +1,15 @@
-<div class="customizable-modal">
-  <div class="customizable-mdl-header">{{ title }}</div>
+<div class="customizable-mdl">
+  <div class="mdl-header">
+    <h1>{{ title }}</h1>
+  </div>
 
-  <div class="customizable-modal-body">
-    <div class="customizable-modal-text">{{ text }}</div>
+  <div class="mdl-text">{{ text }}</div>
 
-    <div class="customizable-modal-actions">
-      <button class="ok-btn" (click)="close()">{{ okBtnLabel }}</button>
+  <div class="mdl-actions">
+    <button (click)="close()">{{ okBtnLabel }}</button>
 
-      <button *ngIf="cancelBtnLabel" class="cancel-btn" (click)="dismiss()">
-        {{ cancelBtnLabel }}
-      </button>
-    </div>
+    <button *ngIf="cancelBtnLabel" class="close-btn" (click)="dismiss()">
+      {{ cancelBtnLabel }}
+    </button>
   </div>
 </div>

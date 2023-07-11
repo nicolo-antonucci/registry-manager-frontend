@@ -6,6 +6,8 @@
   overflow: hidden;
 
   .input-wrapper {
+    background-color: #e7e0ec;
+    height: 36px;
     width: 100%;
     border-radius: 6px;
     overflow: hidden;
@@ -13,28 +15,30 @@
     align-items: center;
 
     h4 {
-      height: 32px;
+      height: 36px;
       border-radius: 6px 0 0 6px;
       margin: 0;
       padding: 6px 12px;
-      background-color: #e7e0ec;
       font-size: 1.25rem;
       font-weight: 400;
+      line-height: 24px;
+      font-style: italic;
     }
 
     input {
-      height: 32px;
-      background-color: #e7e0ec;
+      background-color: transparent;
+      height: 36px;
       flex-grow: 1;
       min-width: 240px;
       margin: 0;
       padding: 6px;
       border: none;
       outline: none;
+      line-height: 24px;
     }
 
     button {
-      height: 32px;
+      height: 36px;
       padding: 6px 12px;
       border: none;
       border-radius: 0 6px 6px 0;
@@ -51,18 +55,19 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (orientation: landscape) and (max-width: 1199px) {
   .entry .input-wrapper h4,
   .entry .input-wrapper input {
     font-size: 0.875rem;
-    line-height: 20px;
-  }
-
-  .entry .input-wrapper h4 {
-    font-style: italic;
   }
 
   .entry .input-wrapper input {
     min-width: 120px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 999px) {
+  .entry .input-error {
+    font-size: 0.75rem;
   }
 }

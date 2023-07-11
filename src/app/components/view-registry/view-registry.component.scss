@@ -1,6 +1,6 @@
 .registry {
   height: 100vh;
-  padding: 32px 64px;
+  padding: 36px;
   display: flex;
   flex-direction: column;
   gap: 36px;
@@ -14,6 +14,7 @@
   }
 
   .details {
+    margin: 0 36px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 24px;
@@ -26,13 +27,40 @@
   }
 }
 
+@media screen and (orientation: landscape) and (max-width: 1599px) {
+  .registry {
+    padding: 24px;
+    gap: 24px;
+
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 999px) {
+  .registry {
+    padding: 24px;
+    gap: 18px;
+
+    h1 {
+      font-size: 1rem;
+    }
+
+    .details {
+      margin: 0;
+      gap: 18px;
+    }
+  }
+}
+
 @media screen and (orientation: portrait) and (max-width: 1000px) {
   .registry {
     padding: 24px;
     gap: 24px;
 
     h1 {
-      font-size: 0.875rem;
+      font-size: 1rem;
     }
 
     .details {

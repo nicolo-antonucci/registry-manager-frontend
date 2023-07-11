@@ -1,57 +1,28 @@
-.customizable-modal {
-  height: 240px;
-  display: grid;
-  grid-template-rows: 60px 1fr;
+.customizable-mdl {
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: space-between;
+  gap: 24px;
 
-  &-header {
-    height: 100%;
-    border-bottom: 1px solid #6750a4;
-    background-color: #eaddff;
-    color: #21005d;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    font-weight: bold;
+  .mdl-text {
+    text-align: center;
   }
 
-  &-body {
-    padding: 24px;
-    height: 100%;
-    display: grid;
-    grid-template-rows: 1fr 60px;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
-
-    .customizable-modal-text {
-      text-align: center;
-    }
-  }
-
-  &-actions {
+  .mdl-actions {
     display: flex;
     justify-content: center;
     gap: 12px;
+  }
+}
 
-    button {
-      padding: 6px 12px;
-      font-weight: bold;
-    }
+@media screen and (max-width: 1200px) {
+  .customizable-mdl {
+    gap: 12px;
 
-    .ok-btn {
-      border: 1px solid #625b71;
-      border-radius: 6px;
-      background-color: #e8def8;
-      color: #1d192b;
-    }
-
-    .cancel-btn {
-      border: 1px solid #7d5260;
-      border-radius: 6px;
-      background-color: #ffd8e4;
-      color: #31111d;
+    .mdl-text {
+      font-size: 0.875rem;
+      margin-bottom: 12px;
     }
   }
 }

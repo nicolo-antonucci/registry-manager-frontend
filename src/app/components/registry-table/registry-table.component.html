@@ -1,0 +1,149 @@
+<div class="registries-table" #table>
+  <div
+    class="registries-header"
+    style="--columns: {{ getHeaders.length }}; --colWidth: {{ colWidth }}"
+  >
+    <ng-container *ngFor="let header of getHeaders">
+      <div class="header-cell" style="--columns: {{ getHeaders.length + 1 }}">
+        <span>{{ header.label }}</span>
+        <button
+          [ngClass]="{
+            'selected-sort': isSelectedSort(header.value, 'asc')
+          }"
+          (click)="applySort(header.value, 'asc')"
+        >
+          <fa-icon [icon]="faUp"></fa-icon>
+        </button>
+        <button
+          [ngClass]="{
+            'selected-sort': isSelectedSort(header.value, 'desc')
+          }"
+          (click)="applySort(header.value, 'desc')"
+        >
+          <fa-icon [icon]="faDown"></fa-icon>
+        </button>
+        <form
+          class="header-search"
+          [formGroup]="searchForm"
+          (onSubmit)="applySearch()"
+        >
+          <input formControlName="{{ header.value }}" type="text" />
+          <button class="search-btn" (click)="applySearch()">
+            <fa-icon [icon]="faSearch"></fa-icon>
+          </button>
+        </form>
+      </div>
+    </ng-container>
+
+    <div class="header-cell actions">
+      <button class="search-action-btn" (click)="openSearch()">
+        <fa-icon class="faicon" [icon]="faSearch"></fa-icon>
+      </button>
+      <button
+        class="add-btn"
+        (click)="addRegistryRequested.emit({page, size, sort, dir})"
+      >
+        <fa-icon class="faicon" [icon]="faAdd"></fa-icon>
+      </button>
+    </div>
+  </div>
+
+  <ng-container
+    *ngIf="
+      data && data.registries && (data.registries | getSetLength) > 0;
+      else empty
+    "
+  >
+    <ng-container *ngFor="let registry of data?.registries; let i = index">
+      <div
+        class="registry-row"
+        style="--columns: {{ getHeaders.length }}; --colWidth: {{ colWidth }}"
+        [ngClass]="{
+          'dark-row': i % 2 === 1,
+          highlighted: id && registry.id === id
+        }"
+      >
+        <ng-container *ngFor="let header of getHeaders">
+          <div
+            class="registry-cell border-right"
+            [ngClass]="{
+              'not-available': (registry | getValue: header.value) === 'N/A'
+            }"
+          >
+            {{ registry | getValue: header.value }}
+          </div>
+        </ng-container>
+        <div class="registry-actions">
+          <button
+            (click)="actionRequested.emit({registry, type: actions.EDIT})"
+          >
+            <fa-icon class="row-icon" [icon]="faEdit"></fa-icon>
+          </button>
+          <button
+            (click)="actionRequested.emit({registry, type: actions.DELETE})"
+          >
+            <fa-icon class="row-icon" [icon]="faDelete"></fa-icon></button
+          ><button
+            (click)="actionRequested.emit({registry, type: actions.MAIL})"
+          >
+            <fa-icon class="row-icon" [icon]="faMail"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+
+  <div class="registries-pager" [formGroup]="pageForm">
+    <span class="spacer"></span>
+    <button
+      class="go-btn"
+      [disabled]="!data || data.page === 0"
+      (click)="goToPage(0)"
+    >
+      <fa-icon [icon]="faFirst"></fa-icon>
+    </button>
+    <button
+      class="go-btn"
+      [disabled]="!data || data.page === 0"
+      (click)="goToPage(data ? data.page - 1 : null)"
+    >
+      <fa-icon [icon]="faPrevious"></fa-icon>
+    </button>
+
+    <span></span>
+
+    <div>Pagina</div>
+    <select formControlName="page">
+      <ng-container *ngFor="let page of getPages(data?.pages ?? 0)">
+        <option [value]="page - 1">{{ page }}</option>
+      </ng-container>
+    </select>
+    <div>Elementi per pagina</div>
+    <input formControlName="size" type="number" />
+    <button (click)="goToPage(page)">Vai</button>
+
+    <span></span>
+
+    <button
+      class="go-btn"
+      [disabled]="!data || data.page + 1 === data.pages"
+      (click)="goToPage(data ? data.page + 1 : null)"
+    >
+      <fa-icon [icon]="faNext"></fa-icon>
+    </button>
+    <button
+      class="go-btn"
+      [disabled]="!data || data.page + 1 === data.pages"
+      (click)="goToPage(data ? data.pages - 1 : null)"
+    >
+      <fa-icon [icon]="faLast"></fa-icon>
+    </button>
+    <span class="spacer"></span>
+  </div>
+</div>
+
+<ng-template #empty>
+  <div class="empty">
+    Non è stata trovata alcuna anagrafica per i parametri richiesti
+  </div>
+</ng-template>

@@ -1,5 +1,57 @@
+.new-registry {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  .mdl-header {
+    margin: 0;
+
+    h1 {
+      font-size: 1.25rem;
+      margin: 0;
+    }
+  }
+
+  .registry-form {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  &-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 999px) {
+  .new-registry {
+    gap: 12px;
+
+    .mdl-header h1 {
+      font-size: 1rem;
+    }
+
+    .mdl-header button {
+      display: block;
+    }
+
+    .registry-form {
+      gap: 12px;
+    }
+  }
+
+  .new-registry-actions {
+    display: none;
+  }
+}
+
 @media screen and (orientation: portrait) and (max-width: 1000px) {
   .new-registry {
+    gap: 12px;
+
     .registry-form {
       display: flex;
       flex-direction: column;
